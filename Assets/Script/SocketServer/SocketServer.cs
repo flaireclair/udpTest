@@ -42,11 +42,11 @@ namespace Script.SocketServer
 
 			// 接続が切れるまで送受信を繰り返す
 			while (client.Connected) {
-				while (!reader.EndOfStream){
+				/*while (!reader.EndOfStream){
 					// 一行分の文字列を受け取る
 					var str = reader.ReadLine ();
 					OnMessage(str);
-				}
+				}*/
 
 				// クライアントの接続が切れたら
 				if (client.Client.Poll(1000, SelectMode.SelectRead) && (client.Client.Available == 0)) {
@@ -72,10 +72,13 @@ namespace Script.SocketServer
 			}
 			// 全員に同じメッセージを送る
 			foreach(var client in _clients){
-				try{
+				try
+        {
 					var stream = client.GetStream();
 					stream.Write(sendByte, 0, sendByte.Length);
-				}catch {
+				}
+        catch
+        {
 					_clients.Remove(client);
 				}
 			}

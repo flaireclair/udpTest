@@ -15,7 +15,7 @@ public class main : MonoBehaviour
   //string ipAddr = "192.168.116.73";
   //string ipAddr2 = "192.168.116.72";
 
-  Vector3 vector3 = new Vector3(0, 0, 0);
+  public Vector3 vector3 = new Vector3(0, 0, 0);
   UDPSystem udpSystem;
   public char device = 'A';
 
@@ -51,7 +51,8 @@ public class main : MonoBehaviour
     }
     if (device == 'B')
     {
-      gameObject.transform.position = vector3;
+        vector3 = ClientSocket.data.ToVector3();
+        gameObject.transform.position = vector3;
     }
     text.text = "(" + vector3.x + "," + vector3.y + "," + vector3.z + ")";
   }

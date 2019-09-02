@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Net.NetworkInformation;
+using System.Net;
 
 /*
  * TestServer.cs
@@ -10,7 +11,7 @@ namespace Script.SocketServer
 	public class ServerTest : SocketServer {
 #pragma warning disable 0649
 		// ポート指定（他で使用していないもの、使用されていたら手元の環境によって変更）
-		[SerializeField]private int _port;
+		[SerializeField]private int _port = 11188;
 #pragma warning restore 0649
 		
 		private void Start(){
@@ -31,12 +32,13 @@ namespace Script.SocketServer
           }
         }
       }
-      // 指定したポートを開く
-      Listen(ipAddress, _port);
+            // 指定したポートを開く
+            Listen(IPAddress.Any.ToString(), _port);
 
-      // システムに接続情報をセット（表示用）
-      TCPSystem.Instance.SetIpAddressPort (ipAddress + ":" + _port);
-      Debug.Log(ipAddress + ":" + _port);
+            // システムに接続情報をセット（表示用）
+
+            Debug.Log(IPAddress.Any + ":" + _port);
+            //TCPSystem.Instance.SetIpAddressPort (IPAddress.Any.ToString() + ":" + _port.ToString());
 		}
 
 		// クライアントからメッセージ受信
