@@ -42,11 +42,12 @@ namespace Script.SocketServer
 
 			// 接続が切れるまで送受信を繰り返す
 			while (client.Connected) {
-				/*while (!reader.EndOfStream){
-					// 一行分の文字列を受け取る
-					var str = reader.ReadLine ();
-					OnMessage(str);
-				}*/
+				while (!reader.EndOfStream){
+                    // 一行分の文字列を受け取る
+                    byte[] bytes = new byte[client.ReceiveBufferSize];
+                    stream.Read(bytes, 0, bytes.Length);
+					OnMessage(bytes);
+				}
 
 				// クライアントの接続が切れたら
 				if (client.Client.Poll(1000, SelectMode.SelectRead) && (client.Client.Available == 0)) {
@@ -60,7 +61,7 @@ namespace Script.SocketServer
 
 
 		// メッセージ受信
-		protected virtual void OnMessage(string msg){
+		public virtual void OnMessage(byte[] msg){
 			Debug.Log(msg);
 		}
 
@@ -73,12 +74,12 @@ namespace Script.SocketServer
 			// 全員に同じメッセージを送る
 			foreach(var client in _clients){
 				try
-        {
+                {
 					var stream = client.GetStream();
 					stream.Write(sendByte, 0, sendByte.Length);
 				}
-        catch
-        {
+                catch
+                {
 					_clients.Remove(client);
 				}
 			}
