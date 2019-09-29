@@ -4,19 +4,21 @@ using UnityEngine;
 using System.Net.Sockets;
 using System;
 using System.Threading;
+using System.Text;
 
 namespace Script.SocketServer
 {
     public class ClientSocket : MonoBehaviour
     {
-        public string ipOrHost = "127.0.0.1";
         public int port = 11188;
-        private NetworkStream stream = null;
+        private static NetworkStream stream = null;
         public static DATA data;
-        // Start is called before the first frame update
+        public static TcpClient tcp;
+        public string ipaddr;
+        // Start is calle1d before the first frame update
         void Start()
         {
-
+            tcp = new TcpClient(ipaddr, port);
         }
 
         // Update is called once per frame
@@ -25,21 +27,31 @@ namespace Script.SocketServer
 
         }
 
-        public void Socket(string ip, int port)
+        public static void Socket(string ip, int port)
         {
             Thread thread = new Thread(() =>
             {
-                TcpClient tcp = new TcpClient(ip, port);
-                stream = tcp.GetStream();
-                try
-                {
-                    byte[] bytes = new byte[tcp.ReceiveBufferSize];
-                    stream.Read(bytes, 0, bytes.Length);
-                    data = new DATA(bytes);
+            stream = tcp.GetStream();
+            try
+            {
+                byte[] bytes = new byte[tcp.ReceiveBufferSize];
+                stream.Read(bytes, 0, bytes.Length);
+                Debug.Log(Encoding.UTF8.GetString(bytes));
                 }
                 catch (Exception) { }
+                stream.Close();
             });
             thread.Start();
+        }
+
+        public void SendMessage(string data)
+        {
+            if (stream != null)
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(data);
+                Thread sendthread = new Thread(() => { stream.Write(bytes, 0, bytes.Length); });
+                sendthread.Start();
+            }
         }
 
         /*private NetworkStream GetNetworkStream()

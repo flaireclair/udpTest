@@ -17,12 +17,16 @@ namespace Script.SocketServer
         string ipAddr = "192.168.116.73";
         string ipAddr2 = "192.168.116.72";
 
+        public string ip;
+        public int port;
+
         public static Vector3 vector3 = new Vector3(0, 0, 0);
         UDPSystem udpSystem;
         public char device = 'A';
 
         private void Awake()
         {
+        /*
             switch (device)
             {
                 case 'A':
@@ -35,6 +39,7 @@ namespace Script.SocketServer
                     udpSystem.Receive();
                     break;
             }
+            */
         }
 
         // Use this for initialization
@@ -50,7 +55,12 @@ namespace Script.SocketServer
             {
                 vector3 = gameObject.transform.position;
                 DATA sendData = new DATA(vector3);
-                SocketServer.Send(sendData.ToByte());
+                try
+                {   
+                    ClientSocket.Socket(ip, port);
+                    SocketServer.Send(sendData.ToByte());
+                }
+                catch { }
             }
             if (device == 'B')
             {
