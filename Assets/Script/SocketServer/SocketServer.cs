@@ -22,8 +22,8 @@ namespace Script.SocketServer
 			Debug.Log("ipAddress:"+host+" port:"+port);
 			var ip = IPAddress.Parse(host);
 			_listener = new TcpListener(ip, port);
-			_listener.Start();
-			_listener.BeginAcceptSocket(DoAcceptTcpClientCallback, _listener);
+			//_listener.Start();
+			//_listener.BeginAcceptSocket(DoAcceptTcpClientCallback, _listener);
 		}
 		
 		// クライアントからの接続処理

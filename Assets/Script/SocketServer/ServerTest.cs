@@ -39,7 +39,7 @@ namespace Script.SocketServer
             // システムに接続情報をセット（表示用）
 
             Debug.Log(IPAddress.Any + ":" + _port);
-            TCPSystem.Instance.SetIpAddressPort (IPAddress.Any.ToString() + ":" + _port.ToString());
+            //TCPSystem.Instance.SetIpAddressPort (IPAddress.Any.ToString() + ":" + _port.ToString());
 		}
 
 		// クライアントからメッセージ受信

@@ -54,7 +54,13 @@ namespace Script.SocketServer
             }
             if (device == 'B')
             {
-                gameObject.transform.position = vector3;
+                try
+                {
+                    ClientSocket.Socket(11188);
+                    vector3 = ClientSocket.data.ToVector3();
+                    gameObject.transform.position = vector3;
+                }
+                catch { }
             }
             text.text = "(" + vector3.x + "," + vector3.y + "," + vector3.z + ")";
         }
