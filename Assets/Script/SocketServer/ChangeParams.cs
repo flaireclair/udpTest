@@ -57,7 +57,7 @@ namespace Script.SocketServer
                 DATA sendData = new DATA(vector3);
                 try
                 {   
-                    ClientSocket.Socket(ip, port);
+                    ClientSocket.Socket();
                     SocketServer.Send(sendData.ToByte());
                 }
                 catch { }

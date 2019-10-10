@@ -51,7 +51,7 @@ namespace Script.SocketServer
 
 				// クライアントの接続が切れたら
 				if (client.Client.Poll(1000, SelectMode.SelectRead) && (client.Client.Available == 0)) {
-					Debug.Log("Disconnect: "+client.Client.RemoteEndPoint);
+					Debug.Log("Disconnect: "+ client.Client.RemoteEndPoint);
 					client.Close();
 					_clients.Remove(client);
 					break;

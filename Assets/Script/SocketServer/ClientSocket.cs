@@ -27,7 +27,7 @@ namespace Script.SocketServer
 
         }
 
-        public static void Socket(string ip, int port)
+        public static void Socket()
         {
             Thread thread = new Thread(() =>
             {
@@ -44,12 +44,11 @@ namespace Script.SocketServer
             thread.Start();
         }
 
-        public void SendMessage(string data)
+        public void SendMessage(byte[] sendByte)
         {
             if (stream != null)
             {
-                byte[] bytes = Encoding.UTF8.GetBytes(data);
-                Thread sendthread = new Thread(() => { stream.Write(bytes, 0, bytes.Length); });
+                Thread sendthread = new Thread(() => { stream.Write(sendByte, 0, sendByte.Length); });
                 sendthread.Start();
             }
         }
