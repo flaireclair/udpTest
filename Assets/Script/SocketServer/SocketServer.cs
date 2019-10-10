@@ -14,16 +14,16 @@ using UnityEngine;
 namespace Script.SocketServer
 {
 	public class SocketServer : MonoBehaviour {
-		private TcpListener _listener;
+		private TcpListener listener;
 		private static readonly List<TcpClient> _clients = new List<TcpClient>();
 
 		// ソケット接続準備、待機
 		protected void Listen(string host, int port){
 			Debug.Log("ipAddress:"+host+" port:"+port);
 			var ip = IPAddress.Parse(host);
-			_listener = new TcpListener(ip, port);
-			//_listener.Start();
-			//_listener.BeginAcceptSocket(DoAcceptTcpClientCallback, _listener);
+		    listener = new TcpListener(ip, port);
+			listener.Start();
+			listener.BeginAcceptSocket(DoAcceptTcpClientCallback, listener);
 		}
 		
 		// クライアントからの接続処理
@@ -66,13 +66,16 @@ namespace Script.SocketServer
 		}
 
 		// クライアントにメッセージ送信
-		public static void Send(byte[] sendByte)
+		public static void SendMessageToClient(string msg)
     {
 			if (_clients.Count == 0){
 				return;
 			}
-			// 全員に同じメッセージを送る
-			foreach(var client in _clients){
+
+            var sendByte = Encoding.UTF8.GetBytes(msg);
+
+            // 全員に同じメッセージを送る
+            foreach (var client in _clients){
 				try
                 {
 					var stream = client.GetStream();
@@ -87,7 +90,7 @@ namespace Script.SocketServer
 
 		// 終了処理
 		protected virtual void OnApplicationQuit() {
-			if (_listener == null){
+			if (listener == null){
 				return;
 			}
 
@@ -96,7 +99,7 @@ namespace Script.SocketServer
 					client.Close();
 				}
 			}
-			_listener.Stop();
+			listener.Stop();
 		}
 
 	}

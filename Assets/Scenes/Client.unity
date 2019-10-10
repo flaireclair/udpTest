@@ -306,7 +306,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 689263483}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 329c2b247010e47978afe8d4bb870335, type: 3}
   m_Name: 
@@ -503,7 +503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e56dc09c4b64136499e22171adcef875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObject: {fileID: 1156941029}
+  cube: {fileID: 1156941029}
   text: {fileID: 168010465}
   device: 66
 --- !u!114 &1260227983

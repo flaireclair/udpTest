@@ -11,30 +11,18 @@ namespace Script.SocketServer
     public class ChangeParams : MonoBehaviour
     {
 
-        public GameObject gameObject;
+        public GameObject cube;
         public Text text;
 
         string ipAddr = "192.168.116.73";
         string ipAddr2 = "192.168.116.72";
 
         public static Vector3 vector3 = new Vector3(0, 0, 0);
-        UDPSystem udpSystem;
         public char device = 'A';
 
         private void Awake()
         {
-            switch (device)
-            {
-                case 'A':
-                    udpSystem = new UDPSystem(null);
-                    udpSystem.Set(ipAddr, 5001, ipAddr2, 10020);
-                    break;
-                case 'B':
-                    udpSystem = new UDPSystem((x) => Receive(x));
-                    udpSystem.Set(ipAddr2, 5002, ipAddr, 5001);
-                    udpSystem.Receive();
-                    break;
-            }
+
         }
 
         // Use this for initialization
@@ -50,15 +38,15 @@ namespace Script.SocketServer
             {
                 vector3 = gameObject.transform.position;
                 DATA sendData = new DATA(vector3);
-                SocketServer.Send(sendData.ToByte());
+                //SocketServer.Send(sendData.ToByte());
             }
             if (device == 'B')
             {
                 try
                 {
-                    ClientSocket.Socket(11188);
+                    //ClientSocket.Socket();
                     vector3 = ClientSocket.data.ToVector3();
-                    gameObject.transform.position = vector3;
+                    cube.transform.position = vector3;
                 }
                 catch { }
             }
