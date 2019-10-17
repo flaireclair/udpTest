@@ -23,50 +23,58 @@ namespace Script.SocketServer
 			var ip = IPAddress.Parse(host);
 		    listener = new TcpListener(ip, port);
 			listener.Start();
-			listener.BeginAcceptSocket(DoAcceptTcpClientCallback, listener);
+			listener.BeginAcceptTcpClient(DoAcceptTcpClientCallback, listener);
 		}
 		
 		// クライアントからの接続処理
 		private void DoAcceptTcpClientCallback(IAsyncResult ar) {
-			var listener = (TcpListener)ar.AsyncState;
-			var client = listener.EndAcceptTcpClient(ar);
+			TcpListener listener = (TcpListener)ar.AsyncState;
+			TcpClient client = listener.EndAcceptTcpClient(ar);
 			_clients.Add(client);
-			Debug.Log("Connect: "+client.Client.RemoteEndPoint);
+			Debug.Log("Connect: " + client.Client.RemoteEndPoint);
 
 			// 接続が確立したら次の人を受け付ける
 			listener.BeginAcceptSocket(DoAcceptTcpClientCallback, listener);
 
 			// 今接続した人とのネットワークストリームを取得
-			var stream = client.GetStream();
-			var reader = new StreamReader(stream,Encoding.UTF8);
+			NetworkStream stream = client.GetStream();
+			StreamReader reader = new StreamReader(stream,Encoding.UTF8);
 
-			// 接続が切れるまで送受信を繰り返す
-			while (client.Connected) {
-				while (!reader.EndOfStream){
-                    // 一行分の文字列を受け取る
-                    byte[] bytes = new byte[client.ReceiveBufferSize];
-                    stream.Read(bytes, 0, bytes.Length);
-					OnMessage(bytes);
-				}
+            // 一行分の文字列を受け取る
+            byte[] bytes = new byte[12];
+            int resSize = 0;
 
-				// クライアントの接続が切れたら
-				if (client.Client.Poll(1000, SelectMode.SelectRead) && (client.Client.Available == 0)) {
-					Debug.Log("Disconnect: "+client.Client.RemoteEndPoint);
-					client.Close();
-					_clients.Remove(client);
-					break;
-				}
-			}
-		}
+            // 接続が切れるまで送受信を繰り返す
+            do
+            {
+                Debug.Log("a");
+                Debug.Log(client.Connected);
+                Debug.Log("Byte Length : " + bytes.Length);
+                resSize = stream.Read(bytes, 0, bytes.Length);
+                Debug.Log("b");
+                Debug.Log(resSize);
+                OnMessage(bytes, stream);
+
+                // クライアントの接続が切れたら
+                if (resSize == 0 || (client.Client.Poll(1000, SelectMode.SelectRead) && (client.Client.Available == 0)))
+                {
+                    Debug.Log("Disconnect: " + client.Client.RemoteEndPoint);
+                    client.Close();
+                    _clients.Remove(client);
+                    break;
+                }
+            } while (stream.DataAvailable || bytes[resSize - 1] != '\n');
+
+        }
 
 
 		// メッセージ受信
-		public virtual void OnMessage(byte[] msg){
-			Debug.Log(msg);
+		public virtual void OnMessage(byte[] msg, NetworkStream stream){
+			Debug.Log(BitConverter.ToString(msg));
 		}
 
 		// クライアントにメッセージ送信
-		public static void SendMessageToClient(string msg)
+		public static void SendMessageToClient(string msg, NetworkStream stream)
     {
 			if (_clients.Count == 0){
 				return;
@@ -78,8 +86,8 @@ namespace Script.SocketServer
             foreach (var client in _clients){
 				try
                 {
-					var stream = client.GetStream();
 					stream.Write(sendByte, 0, sendByte.Length);
+                    Debug.Log("Send!");
 				}
                 catch
                 {

@@ -292,6 +292,8 @@ GameObject:
   m_Component:
   - component: {fileID: 689263485}
   - component: {fileID: 689263484}
+  - component: {fileID: 689263487}
+  - component: {fileID: 689263486}
   m_Layer: 0
   m_Name: SocketServer
   m_TagString: Untagged
@@ -326,6 +328,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &689263486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689263483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e306a6d4a50dafd4abdc102e8433c078, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  port: 11188
+--- !u!114 &689263487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689263483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e56dc09c4b64136499e22171adcef875, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cube: {fileID: 1156941029}
+  text: {fileID: 168010465}
+  device: 66
 --- !u!4 &845719445 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 03ce8729af6ed954abd55963c0af8fc3,
@@ -434,8 +464,6 @@ GameObject:
   - component: {fileID: 1260227981}
   - component: {fileID: 1260227980}
   - component: {fileID: 1260227979}
-  - component: {fileID: 1260227982}
-  - component: {fileID: 1260227983}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -491,34 +519,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1260227982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1260227978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e56dc09c4b64136499e22171adcef875, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cube: {fileID: 1156941029}
-  text: {fileID: 168010465}
-  device: 66
---- !u!114 &1260227983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1260227978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e306a6d4a50dafd4abdc102e8433c078, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  port: 11188
 --- !u!1 &1358588879
 GameObject:
   m_ObjectHideFlags: 0

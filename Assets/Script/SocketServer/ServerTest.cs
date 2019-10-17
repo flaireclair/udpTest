@@ -43,7 +43,7 @@ namespace Script.SocketServer
 		}
 
 		// クライアントからメッセージ受信
-		public override void OnMessage(byte[] msg){
+		/*public override void OnMessage(byte[] msg){
 			base.OnMessage(msg);
 
             // ------------------------------------------------
@@ -66,8 +66,8 @@ namespace Script.SocketServer
 				// クライアントにエラーメッセージを返す
 				Send (null);
 			}
-            */
-        }
+            
+        }*/
 
 	}
 }

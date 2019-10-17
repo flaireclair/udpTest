@@ -20,7 +20,7 @@ namespace Script.SocketServer
         private readonly List<TcpClient> clients = new List<TcpClient>();
         private string ipAddress;
         // Start is called before the first frame update
-        void Awake()
+        void Start()
         {
             // 接続中のIPアドレスを取得
             foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())
@@ -49,9 +49,9 @@ namespace Script.SocketServer
 
         }
 
-        public override void OnMessage(byte[] msg)
+        public override void OnMessage(byte[] msg, NetworkStream stream)
         {
-            base.OnMessage(msg);
+            base.OnMessage(msg, stream);
 
             Debug.Log(Encoding.UTF8.GetString(msg));
             data = new DATA(msg);
@@ -59,7 +59,7 @@ namespace Script.SocketServer
             Vector3 response = data.ToVector3();
 
             // クライアントに受領メッセージを返す
-            SendMessageToClient(("Accept: x:" + response.x + ", y: " + response.y + ", z:" + response.z + "\n"));
+            SendMessageToClient(("Accept: x:" + response.x + ", y: " + response.y + ", z:" + response.z + "\n"), stream);
         }
 
         public static void Socket()
