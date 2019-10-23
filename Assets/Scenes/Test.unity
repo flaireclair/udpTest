@@ -354,6 +354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ipaddr: 172.20.10.11
   port: 11188
+  obj: {fileID: 1156941029}
 --- !u!4 &845719445 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 03ce8729af6ed954abd55963c0af8fc3,
@@ -445,7 +446,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1156941029}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.95, y: -1, z: 0}
+  m_LocalPosition: {x: 2, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -558,7 +559,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1260227978}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c3c75b1c59771aa40827547ab4c91f5d, type: 3}
   m_Name: 

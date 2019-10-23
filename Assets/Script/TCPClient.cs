@@ -15,29 +15,28 @@ public class TCPClient : MonoBehaviour
     private NetworkStream ns;
     private Thread clientReceiveThread;
     private TcpClient tcp;
+    private DATA data;
+
+    [SerializeField]
+    private GameObject obj;
+    private Transform tran;
+    private Vector3 pos;
 
     // Start is called before the first frame update
     void Start()
     {
         //TcpClientを作成し、サーバーと接続する
         tcp = new TcpClient(ipaddr, port);
+        var ip = IPAddress.Parse(ipaddr);
+        tran = obj.transform;
+        Debug.Log(tran.position);
+        tcp.BeginConnect(ip, port, DoAcceptTcpClientCallback, tcp);
         Debug.Log("サーバー( " + ((IPEndPoint)tcp.Client.RemoteEndPoint).Address + " : " +
             ((IPEndPoint)tcp.Client.RemoteEndPoint).Port + " )と接続しました( " +
             ((IPEndPoint)tcp.Client.LocalEndPoint).Address + " : " +
             ((IPEndPoint)tcp.Client.LocalEndPoint).Port + " )。");
 
-        
-
-        //NetworkStreamを取得する
-        ns = tcp.GetStream();
-
-        //読み取り、書き込みのタイムアウトを10秒にする
-        //デフォルトはInfiniteで、タイムアウトしない
-        //(.NET Framework 2.0以上が必要)
-        ns.ReadTimeout = 10000;
-        ns.WriteTimeout = 10000;
-
-        try
+        /*try
         {
             clientReceiveThread = new Thread(new ThreadStart(DoAcceptTcpClientCallback));
             clientReceiveThread.IsBackground = true;
@@ -46,29 +45,48 @@ public class TCPClient : MonoBehaviour
         catch (Exception e)
         {
             Debug.Log("On client connect exception " + e);
-        }
+        }*/
+    }
+
+    private void FixedUpdate()
+    {
+        pos = tran.position;
     }
 
     // 接続処理
-    private void DoAcceptTcpClientCallback()
+    private void DoAcceptTcpClientCallback(IAsyncResult ar)
     {
+        Debug.Log(1);
         while(true)
         {
+            Debug.Log(2);
             // 一行分の文字列を受け取る
-            byte[] bytes = new byte[tcp.ReceiveBufferSize];
-
-            var reader = new StreamReader(ns, Encoding.UTF8);
+            byte[] bytes = new byte[tcp.SendBufferSize];
+            Debug.Log(3);
+            //var reader = new StreamReader(ns, Encoding.UTF8);
+            Debug.Log(6);
+            Debug.Log(pos);
+            data = new DATA(pos);
+            Debug.Log(7);
+            bytes = data.ToByte();
+            Debug.Log(BitConverter.ToString(bytes));
+            Debug.Log("Byte Length : " + bytes.Length);
+            int resSize = 0;
 
             // Read incomming stream into byte arrary. 					
-            while (!reader.EndOfStream)
+            do
             {
-                ns.Read(bytes, 0, bytes.Length);
+                Debug.Log(4);
                 ns.Write(bytes, 0, bytes.Length);
+                Debug.Log(8);
+                resSize =  ns.Read(bytes, 0, bytes.Length);
                 Debug.Log("server message received as: " + bytes);
-            }
+            } while (ns.DataAvailable);
+
+            Debug.Log(5);
 
             // 接続が切れたら
-            if (tcp.Client.Poll(1000, SelectMode.SelectRead) && (tcp.Client.Available == 0))
+            if (resSize == 0 || (tcp.Client.Poll(1000, SelectMode.SelectRead) && (tcp.Client.Available == 0)))
             {
                 Debug.Log("Disconnect: " + tcp.Client.RemoteEndPoint);
                 tcp.Close();

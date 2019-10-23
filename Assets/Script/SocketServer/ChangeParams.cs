@@ -75,20 +75,20 @@ namespace Script.SocketServer
             vector3 = getData.ToVector3();
         }
     }
-    public class DATA
+    public class DAT
     {
         private float x;
         private float y;
         private float z;
 
-        public DATA(byte[] bytes)
+        public DAT(byte[] bytes)
         {
             x = BitConverter.ToSingle(bytes, 0);
             y = BitConverter.ToSingle(bytes, 4);
             z = BitConverter.ToSingle(bytes, 8);
         }
 
-        public DATA(Vector3 vector3)
+        public DAT(Vector3 vector3)
         {
             x = vector3.x;
             y = vector3.y;
