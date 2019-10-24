@@ -28,54 +28,64 @@ namespace Script.SocketServer
 		
 		// クライアントからの接続処理
 		private void DoAcceptTcpClientCallback(IAsyncResult ar) {
-			TcpListener listener = (TcpListener)ar.AsyncState;
-			TcpClient client = listener.EndAcceptTcpClient(ar);
-			_clients.Add(client);
-			Debug.Log("Connect: " + client.Client.RemoteEndPoint);
 
-			// 接続が確立したら次の人を受け付ける
-			listener.BeginAcceptSocket(DoAcceptTcpClientCallback, listener);
-
-			// 今接続した人とのネットワークストリームを取得
-			NetworkStream stream = client.GetStream();
-			StreamReader reader = new StreamReader(stream,Encoding.UTF8);
-
-            // 一行分の文字列を受け取る
-            byte[] bytes = new byte[12];
-            int resSize = 0;
-
-            // 接続が切れるまで送受信を繰り返す
-            do
+            // 今接続した人とのネットワークストリームを取得
+            using (TcpClient client = listener.EndAcceptTcpClient(ar))
+            using (NetworkStream stream = client.GetStream())
             {
-                Debug.Log("a");
-                Debug.Log(client.Connected);
-                Debug.Log("Byte Length : " + bytes.Length);
-                resSize = stream.Read(bytes, 0, bytes.Length);
-                Debug.Log("b");
-                Debug.Log(resSize);
-                OnMessage(bytes, stream);
+                Debug.Log("Connect: " + client.Client.RemoteEndPoint);
+                string responce = string.Empty;
 
-                // クライアントの接続が切れたら
-                if (resSize == 0 || (client.Client.Poll(1000, SelectMode.SelectRead) && (client.Client.Available == 0)))
+                using (BinaryReader reader = new BinaryReader(stream, Encoding.UTF8))
+                using (BinaryWriter writer = new BinaryWriter(stream, Encoding.UTF8))
                 {
-                    Debug.Log("Disconnect: " + client.Client.RemoteEndPoint);
-                    client.Close();
-                    _clients.Remove(client);
-                    break;
+                    // 一行分の文字列を受け取る
+                    byte[] bytes = new byte[12];
+                    int resSize = 0;
+                    do
+                    {
+                        int numBytesRead = 0;
+                        // 接続が切れるまで送受信を繰り返す
+                        Debug.Log("a");
+                        Debug.Log(client.Connected);
+                        Debug.Log("Byte Length : " + bytes.Length);
+                        int n = reader.Read(bytes, numBytesRead, bytes.Length);
+                        numBytesRead += n;
+                        resSize = numBytesRead;
+                        // クライアントの接続が切れたら
+                        if (numBytesRead == 0 || (client.Client.Poll(1000, SelectMode.SelectRead) && (client.Client.Available == 0)))
+                        {
+                            Debug.Log("Disconnect1: " + client.Client.RemoteEndPoint);
+                            client.Close();
+                            _clients.Remove(client);
+                            break;
+                        }
+                        Debug.Log("b");
+                        Debug.Log(resSize);
+                        OnMessage(bytes, writer);
+                    } while (stream.DataAvailable || bytes[resSize - 1] != '\n');
                 }
-            } while (stream.DataAvailable || bytes[resSize - 1] != '\n');
-
+            }
         }
 
 
 		// メッセージ受信
-		public virtual void OnMessage(byte[] msg, NetworkStream stream){
+		public virtual void OnMessage(byte[] msg, BinaryWriter writer)
+        {
 			Debug.Log(BitConverter.ToString(msg));
-		}
+
+            Debug.Log(Encoding.UTF8.GetString(msg));
+            ClientSocket.data = new DATA(msg);
+
+            Vector3 response = ClientSocket.data.ToVector3();
+
+            // クライアントに受領メッセージを返す
+            SendMessageToClient(("Accept: x:" + response.x + ", y: " + response.y + ", z:" + response.z + "\n"), writer);
+        }
 
 		// クライアントにメッセージ送信
-		public static void SendMessageToClient(string msg, NetworkStream stream)
-    {
+		public static void SendMessageToClient(string msg, BinaryWriter writer)
+        {
 			if (_clients.Count == 0){
 				return;
 			}
@@ -86,7 +96,7 @@ namespace Script.SocketServer
             foreach (var client in _clients){
 				try
                 {
-					stream.Write(sendByte, 0, sendByte.Length);
+					writer.Write(sendByte, 0, 2);
                     Debug.Log("Send!");
 				}
                 catch

@@ -49,18 +49,7 @@ namespace Script.SocketServer
 
         }
 
-        public override void OnMessage(byte[] msg, NetworkStream stream)
-        {
-            base.OnMessage(msg, stream);
-
-            Debug.Log(Encoding.UTF8.GetString(msg));
-            data = new DATA(msg);
-
-            Vector3 response = data.ToVector3();
-
-            // クライアントに受領メッセージを返す
-            SendMessageToClient(("Accept: x:" + response.x + ", y: " + response.y + ", z:" + response.z + "\n"), stream);
-        }
+        
 
         public static void Socket()
         {
