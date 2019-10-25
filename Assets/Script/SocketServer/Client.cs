@@ -50,8 +50,9 @@ public class Client : MonoBehaviour
     {
         try
         {
-            socketConnection = new TcpClient(ipadress, 8052);
+            socketConnection = new TcpClient("localhost", 8052);
             Byte[] bytes = new Byte[1024];
+            Debug.Log(socketConnection.Client.RemoteEndPoint);
             while (true)
             {
                 // Get a stream object for reading 				
@@ -103,4 +104,10 @@ public class Client : MonoBehaviour
             Debug.Log("Socket exception: " + socketException);
         }
     }
+
+  private void OnApplicationQuit()
+  {
+    Debug.Log("Disconnect: " + socketConnection.Client.RemoteEndPoint);
+    socketConnection.Close();
+  }
 }
