@@ -294,6 +294,7 @@ GameObject:
   - component: {fileID: 689263484}
   - component: {fileID: 689263486}
   - component: {fileID: 689263487}
+  - component: {fileID: 689263488}
   m_Layer: 0
   m_Name: SocketServer
   m_TagString: Untagged
@@ -347,7 +348,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 689263483}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f582ef25b9b9cca459c83b375ee9b208, type: 3}
   m_Name: 
@@ -355,6 +356,19 @@ MonoBehaviour:
   ipaddr: 172.20.10.11
   port: 11188
   obj: {fileID: 1156941029}
+--- !u!114 &689263488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689263483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1660eb196cb87c54f95e573cbab14359, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ipadress: 192.168.3.18
 --- !u!4 &845719445 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 03ce8729af6ed954abd55963c0af8fc3,

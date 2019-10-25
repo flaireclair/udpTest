@@ -25,16 +25,18 @@ public class TCPClient : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        tran = obj.transform;
+        Debug.Log(tran.position);
+        pos = tran.position;
         //TcpClientを作成し、サーバーと接続する
         tcp = new TcpClient(ipaddr, port);
         var ip = IPAddress.Parse(ipaddr);
-        tran = obj.transform;
-        Debug.Log(tran.position);
         tcp.BeginConnect(ip, port, DoAcceptTcpClientCallback, tcp);
         Debug.Log("サーバー( " + ((IPEndPoint)tcp.Client.RemoteEndPoint).Address + " : " +
             ((IPEndPoint)tcp.Client.RemoteEndPoint).Port + " )と接続しました( " +
             ((IPEndPoint)tcp.Client.LocalEndPoint).Address + " : " +
             ((IPEndPoint)tcp.Client.LocalEndPoint).Port + " )。");
+        //DoAcceptTcpClientCallback();
 
         /*try
         {
@@ -59,6 +61,7 @@ public class TCPClient : MonoBehaviour
         Debug.Log(1);
         while(true)
         {
+            
             Debug.Log(2);
             // 一行分の文字列を受け取る
             byte[] bytes = new byte[tcp.SendBufferSize];
@@ -72,6 +75,8 @@ public class TCPClient : MonoBehaviour
             Debug.Log(BitConverter.ToString(bytes));
             Debug.Log("Byte Length : " + bytes.Length);
             int resSize = 0;
+            //ns = tcp.GetStream();
+
 
             // Read incomming stream into byte arrary. 					
             do
