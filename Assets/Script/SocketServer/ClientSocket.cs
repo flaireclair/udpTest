@@ -39,7 +39,7 @@ namespace Script.SocketServer
                 }
             }
             // 指定したポートを開く
-            Listen("192.168.11.31", port);
+            Listen(IPAddress.Any.ToString(), port);
             Debug.Log("now Listen Start! : " + ipAddress);  
         }
 

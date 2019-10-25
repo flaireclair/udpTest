@@ -17,13 +17,13 @@ namespace Script.SocketServer
         string ipAddr = "192.168.116.73";
         string ipAddr2 = "192.168.116.72";
 
-        public static Vector3 vector3 = new Vector3(0, 0, 0);
+        public static Vector3 vector3;
         public char device = 'A';
 
         private void Awake()
         {
-
-        }
+      vector3 = new Vector3(0, 0, 0);
+    }
 
         // Use this for initialization
         void Start()
@@ -42,13 +42,9 @@ namespace Script.SocketServer
             }
             if (device == 'B')
             {
-                try
-                {
-                    //ClientSocket.Socket();
-                    vector3 = ClientSocket.data.ToVector3();
-                    cube.transform.position = vector3;
-                }
-                catch { }
+                  //ClientSocket.Socket();
+                  if(SocketServer._clients.Count != 0) vector3 = ClientSocket.data.ToVector3();
+                  cube.transform.position = vector3;
             }
             text.text = "(" + vector3.x + "," + vector3.y + "," + vector3.z + ")";
         }

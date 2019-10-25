@@ -15,7 +15,7 @@ namespace Script.SocketServer
 {
 	public class SocketServer : MonoBehaviour {
 		private TcpListener listener;
-		private static readonly List<TcpClient> _clients = new List<TcpClient>();
+		public static readonly List<TcpClient> _clients = new List<TcpClient>();
 
 		// ソケット接続準備、待機
 		protected void Listen(string host, int port){
@@ -72,9 +72,7 @@ namespace Script.SocketServer
 		// メッセージ受信
 		public virtual void OnMessage(byte[] msg, BinaryWriter writer)
         {
-			Debug.Log(BitConverter.ToString(msg));
-
-            Debug.Log(Encoding.UTF8.GetString(msg));
+			      Debug.Log(BitConverter.ToString(msg));
             ClientSocket.data = new DATA(msg);
 
             Vector3 response = ClientSocket.data.ToVector3();
